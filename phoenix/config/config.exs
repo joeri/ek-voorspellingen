@@ -23,6 +23,25 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# configure guardian
+# Secrets for production are placed in config/prod.secret.exs which is not versioned
+config :guardian, Guardian,
+  allowed_algos: ["ES512"],
+  verify_module: Guardian.JWT,
+  issuer: "EcPredictions",
+  ttl: { 30, :days},
+  verify_issuer: true,
+  secret_key: %{
+    "alg" => "ES512",
+    "crv" => "P-521",
+    "d" => "AS6cX4-2f2XUjbes3XyQ5HUDI7W4bAHUbtILNesM1RotGqVWH0TcjyjPHoCULBH3_45we2YJdJ3ER3xs6IAaGwwR",
+    "kty" => "EC",
+    "use" => "sig",
+    "x" => "ABYKICdYRldPSRx6fOhE7Ftmt30_tVE2gfNwC7NrV0zAPwJvp81SyfabyBk_J_hTTt-IIgFpfkbxYEovSoDVQEHd",
+    "y" => "AeIF0MD3AkPFiNfGm1lZmLl_QqvtTExq0tV9exZqUVwVzzKGR_ZWQPwMwGTKE0rSXPZ_ipKbBaRjlb3i6owb62pv"
+  },
+  serializer: EcPredictions.GuardianSerializer
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

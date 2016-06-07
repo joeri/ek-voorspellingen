@@ -52,6 +52,7 @@ defmodule EcPredictions.Web do
       import EcPredictions.Router.Helpers
       import EcPredictions.ErrorHelpers
       import EcPredictions.Gettext
+      import EcPredictions.ViewHelper
     end
   end
 
