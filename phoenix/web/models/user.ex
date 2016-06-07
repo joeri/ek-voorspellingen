@@ -8,6 +8,7 @@ defmodule EcPredictions.User do
     field :password_hash, :string
 
     has_many :favourites, EcPredictions.Favourite
+    has_many :qualifieds, EcPredictions.Qualified
 
     timestamps
   end

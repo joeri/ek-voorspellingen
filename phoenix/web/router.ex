@@ -35,6 +35,8 @@ defmodule EcPredictions.Router do
     resources "/user", UserController, only: [:show, :index, :update]
     get "/favourites", FavouriteController, :show
     post "/favourites", FavouriteController, :update
+    get "/qualifieds", QualifiedController, :show
+    post "/qualifieds", QualifiedController, :update
   end
 
   # Other scopes may use custom stacks.
