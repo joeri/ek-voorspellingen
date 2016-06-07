@@ -4,7 +4,7 @@ defmodule EcPredictions.Repo.Migrations.CreateGame do
   def change do
     create table(:games) do
       add :start_time, :datetime, null: false
-      add :fist_goal, :integer
+      add :first_goal, :integer
       add :home_country_goals, :integer
       add :away_country_goals, :integer
       add :final_home_country_goals, :integer
