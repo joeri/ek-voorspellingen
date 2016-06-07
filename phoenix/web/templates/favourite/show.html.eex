@@ -1,0 +1,8 @@
+<h1>Select your favourite countries</h1>
+<%= form_for @conn, favourite_path(@conn, :update), [as: :favourites], fn f -> %>
+  <%= for country <- @countries do %>
+    <%= checkbox(f, String.to_atom("country[#{country.id}]"), value: is_favourite(@favourites, country)) %>
+    <%= label(f, "country[#{country.id}]", country.name) %>
+  <% end %>
+  <%= submit "Save", class: "btn btn-primary" %>
+<% end %>

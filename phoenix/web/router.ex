@@ -33,6 +33,8 @@ defmodule EcPredictions.Router do
     pipe_through [:browser, :browser_auth]
 
     resources "/user", UserController, only: [:show, :index, :update]
+    get "/favourites", FavouriteController, :show
+    post "/favourites", FavouriteController, :update
   end
 
   # Other scopes may use custom stacks.
