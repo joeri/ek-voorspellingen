@@ -11,8 +11,8 @@ defmodule EcPredictions.Game do
     field :penalties_home_country_goals, :integer
     field :penalties_away_country_goals, :integer
     field :round, :integer
-    belongs_to :home_country, EcPredictions.HomeCountry
-    belongs_to :away_country, EcPredictions.AwayCountry
+    belongs_to :home_country, EcPredictions.Country
+    belongs_to :away_country, EcPredictions.Country
 
     timestamps
   end
