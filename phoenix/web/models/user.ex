@@ -9,6 +9,7 @@ defmodule EcPredictions.User do
 
     has_many :favourites, EcPredictions.Favourite
     has_many :qualifieds, EcPredictions.Qualified
+    has_many :predictions, EcPredictions.Prediction
 
     timestamps
   end

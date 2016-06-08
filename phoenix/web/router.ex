@@ -37,6 +37,7 @@ defmodule EcPredictions.Router do
     post "/favourites", FavouriteController, :update
     get "/qualifieds", QualifiedController, :show
     post "/qualifieds", QualifiedController, :update
+    resources "/predictions", PredictionController
   end
 
   # Other scopes may use custom stacks.

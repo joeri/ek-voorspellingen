@@ -1,0 +1,19 @@
+<h1>Predict the unpredictable</h1>
+<table class=table>
+  <thead>
+    <tr>
+      <th>Home Country</th>
+      <th>Away Country</th>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <%= for game <- @games do %>
+    <tr>
+      <td><%= game.home_country.name %></td>
+      <td><%= game.away_country.name %></td>
+      <td><%= Ecto.DateTime.to_string(game.start_time) %></td>
+      <td><%= edit_or_create_prediction(@conn, @predictions, game.id) %></td>
+    </tr>
+  <% end %>
+</table>
