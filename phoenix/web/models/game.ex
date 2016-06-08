@@ -23,6 +23,8 @@ defmodule EcPredictions.Game do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:start_time, :first_goal, :home_country_goals, :away_country_goals, :final_home_country_goals, :final_away_country_goals, :penalties_home_country_goals, :penalties_away_country_goals, :round])
+    |> put_assoc(:away_country, params["away_country"])
+    |> put_assoc(:home_country, params["home_country"])
     |> validate_required([:start_time, :round])
   end
 
