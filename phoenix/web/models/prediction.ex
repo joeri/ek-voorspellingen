@@ -5,6 +5,7 @@ defmodule EcPredictions.Prediction do
     field :home_country_goals, :integer
     field :away_country_goals, :integer
     field :first_goal, :integer
+
     belongs_to :game, EcPredictions.Game
     belongs_to :user, EcPredictions.User
 
@@ -16,7 +17,15 @@ defmodule EcPredictions.Prediction do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:home_country_goals, :away_country_goals, :first_goal])
-    |> validate_required([:home_country_goals, :away_country_goals, :first_goal])
+    |> cast(params, [:home_country_goals, :away_country_goals, :game_id])
+    |> validate_required([:home_country_goals, :away_country_goals])
+    |> put_assoc(:user, params["user"])
   end
+
+  def update_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:home_country_goals, :away_country_goals])
+    |> validate_required([:home_country_goals, :away_country_goals])
+  end
+
 end
