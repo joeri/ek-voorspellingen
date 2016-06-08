@@ -24,7 +24,6 @@ defmodule EcPredictions.Router do
   scope "/", EcPredictions do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
     resources "/users", UserController, only: [:new, :create]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
   end
@@ -32,6 +31,7 @@ defmodule EcPredictions.Router do
   scope "/", EcPredictions do
     pipe_through [:browser, :browser_auth]
 
+    get "/", PageController, :index
     resources "/user", UserController, only: [:show, :index, :update]
     get "/favourites", FavouriteController, :show
     post "/favourites", FavouriteController, :update

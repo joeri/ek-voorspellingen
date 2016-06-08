@@ -5,14 +5,14 @@ defmodule EcPredictions.SessionController do
     render conn, "new.html"
   end
 
-  def create(conn, %{"session" => %{"email" => user, 
+  def create(conn, %{"session" => %{"email" => user,
                                   "password" => pass}}) do
     case EcPredictions.Auth.login_by_email_and_pass(conn, user, pass, repo: Repo) do
       {:ok, conn} ->
         logged_in_user = Guardian.Plug.current_resource(conn)
         conn
         |> put_flash(:info, "Logged in successfully")
-        |> redirect(to: user_path(conn, :show, logged_in_user))
+        |> redirect(to: page_path(conn, :index))
       {:error, _reason, conn} ->
         conn
         |> put_flash(:error, "Unknown username or password")
