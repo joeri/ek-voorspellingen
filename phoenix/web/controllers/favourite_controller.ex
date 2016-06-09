@@ -43,7 +43,9 @@ defmodule EcPredictions.FavouriteController do
       |> Ecto.Changeset.put_assoc(:favourites, changes)
       |> Repo.update!()
 
-      redirect(conn, to: favourite_path(conn, :show))
+      conn
+      |> put_flash(:info, "Updated selection")
+      |> redirect(to: favourite_path(conn, :show))
     end
   end
 end

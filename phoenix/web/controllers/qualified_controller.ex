@@ -43,7 +43,9 @@ defmodule EcPredictions.QualifiedController do
       |> Ecto.Changeset.put_assoc(:qualifieds, changes)
       |> Repo.update!()
 
-      redirect(conn, to: qualified_path(conn, :show))
+      conn
+      |> put_flash(:info, "Updated selection")
+      |> redirect(to: qualified_path(conn, :show))
     end
   end
 end
