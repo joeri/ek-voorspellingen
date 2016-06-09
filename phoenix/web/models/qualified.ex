@@ -15,7 +15,7 @@ defmodule EcPredictions.Qualified do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:user_id, :country_id])
+    |> cast(params, [:user_id, :country_id, :delete])
     |> validate_required([:user_id, :country_id])
     |> mark_for_deletion()
   end
