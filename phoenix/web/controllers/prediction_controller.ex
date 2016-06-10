@@ -18,7 +18,13 @@ defmodule EcPredictions.PredictionController do
 
     IO.inspect changeset
 
-    render(conn, "new.html", game: game, changeset: changeset)
+    if game.start_time <= Ecto.DateTime.utc do
+        conn
+        |> put_flash(:error, "Game has started or is over")
+        |> redirect(to: prediction_path(conn, :index))
+    else
+      render(conn, "new.html", game: game, changeset: changeset)
+    end
   end
   def new(conn, _params) do
     conn
@@ -31,13 +37,21 @@ defmodule EcPredictions.PredictionController do
     game = Repo.get(Game, prediction_params["game_id"]) |> Repo.preload([:home_country, :away_country])
     changeset = Prediction.changeset(%Prediction{}, Map.put(prediction_params, "user", user))
 
-    case Repo.insert(changeset) do
-      {:ok, prediction} ->
+    if game.start_time <= Ecto.DateTime.utc do
         conn
-        |> put_flash(:info, "Prediction made!")
+        |> put_flash(:error, "Game has started or is over")
         |> redirect(to: prediction_path(conn, :index))
-      {:error, changeset} ->
-        render(conn, "new.html", game: game, changeset: changeset)
+    else
+      case Repo.insert(changeset) do
+        {:ok, prediction} ->
+          conn
+          |> put_flash(:info, "Prediction made!")
+          |> redirect(to: prediction_path(conn, :index))
+        {:error, changeset} ->
+          conn
+          |> put_flash(:error, "Couldn't create the prediction")
+          |> render("new.html", game: game, changeset: changeset)
+      end
     end
   end
 
@@ -46,13 +60,19 @@ defmodule EcPredictions.PredictionController do
     prediction = Repo.get(Prediction, id) |> Repo.preload(game: [:home_country, :away_country])
     changeset = Prediction.update_changeset(prediction)
 
-    cond do
-      user.id == prediction.user_id ->
-        render(conn, "edit.html", game: prediction.game, prediction: prediction, changeset: changeset)
-      true ->
+    if prediction.game.start_time <= Ecto.DateTime.utc do
         conn
-        |> put_flash(:error, "You can only modify your own predictions.")
+        |> put_flash(:error, "Game has started or is over")
         |> redirect(to: prediction_path(conn, :index))
+    else
+      cond do
+        user.id == prediction.user_id ->
+          render(conn, "edit.html", game: prediction.game, prediction: prediction, changeset: changeset)
+        true ->
+          conn
+          |> put_flash(:error, "You can only modify your own predictions.")
+          |> redirect(to: prediction_path(conn, :index))
+      end
     end
   end
 

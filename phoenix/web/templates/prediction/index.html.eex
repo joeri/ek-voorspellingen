@@ -13,7 +13,7 @@
       <td><%= game.home_country.name %></td>
       <td><%= game.away_country.name %></td>
       <td><%= Ecto.DateTime.to_string(game.start_time) %></td>
-      <td><%= edit_or_create_prediction(@conn, @predictions, game.id) %></td>
+      <td><%= edit_or_create_prediction(@conn, @predictions, game) %></td>
     </tr>
   <% end %>
 </table>
