@@ -36,7 +36,7 @@ defmodule EcPredictions.FavouriteController do
 
     if length(favourites) > 8 do
       conn
-      |> put_flash(:info, "Selected too many favourites")
+      |> put_flash(:error, "Selected too many favourites")
       |> render("show.html", user: user, favourites: user.favourites, groups: groups)
     else
       User.changeset(user, %{})

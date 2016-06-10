@@ -36,7 +36,7 @@ defmodule EcPredictions.QualifiedController do
 
     if length(qualifieds) > 16 do
       conn
-      |> put_flash(:info, "Selected too many qualified countries")
+      |> put_flash(:error, "Selected too many qualified countries")
       |> render("show.html", user: user, qualifieds: user.qualifieds, groups: groups)
     else
       User.changeset(user, %{})
