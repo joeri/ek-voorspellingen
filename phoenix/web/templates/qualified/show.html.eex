@@ -1,8 +1,19 @@
 <h1>Select the countries you think will qualify</h1>
+<div class=info>
+  Choose the 16 countries that you think will qualify.
+</div>
 <%= form_for @conn, qualified_path(@conn, :update), [as: :qualifieds], fn f -> %>
-  <%= for country <- @countries do %>
-    <%= checkbox(f, String.to_atom("country[#{country.id}]"), value: is_qualified(@qualifieds, country)) %>
-    <%= label(f, "country[#{country.id}]", country.name) %>
+  <%= for group <- @groups do %>
+    <div>
+      <h2>Group <%= group.name %></h2>
+      <ul>
+        <%= for cg <- (group.country_groups |> Enum.sort_by(&(&1.rank))) do %>
+          <li>
+            <%= checkbox(f, String.to_atom("country[#{cg.country.id}]"), value: is_qualified(@qualifieds, cg.country)) %>
+            <%= label(f, "country[#{cg.country.id}]", cg.country.name) %>
+          </li>
+        <% end %>
+      </ul>
   <% end %>
   <%= submit "Save", class: "btn btn-primary" %>
 <% end %>

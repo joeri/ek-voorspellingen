@@ -3,8 +3,8 @@ defmodule EcPredictions.Group do
 
   schema "groups" do
     field :name, :string
-    belongs_to :seed, EcPredictions.Group
-    belongs_to :bottom, EcPredictions.Group
+
+    has_many :country_groups, EcPredictions.CountryGroup
 
     timestamps
   end
@@ -17,7 +17,5 @@ defmodule EcPredictions.Group do
     |> cast(params, [:name])
     |> validate_required([:name])
     |> unique_constraint(:name)
-    |> unique_constraint(:seed_id)
-    |> unique_constraint(:bottom_id)
   end
 end

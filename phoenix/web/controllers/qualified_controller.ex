@@ -2,12 +2,12 @@ defmodule EcPredictions.QualifiedController do
   use EcPredictions.Web, :controller
   alias EcPredictions.User
   alias EcPredictions.Qualified
-  alias EcPredictions.Country
+  alias EcPredictions.Group
 
   def show(conn, _params) do
     user = Guardian.Plug.current_resource(conn) |> Repo.preload(:qualifieds)
-    countries = Repo.all Country
-    render(conn, "show.html", user: user, qualifieds: user.qualifieds, countries: countries)
+    groups = Repo.all(Group) |> Repo.preload(country_groups: :country)
+    render(conn, "show.html", user: user, qualifieds: user.qualifieds, groups: groups)
   end
 
   def update(conn, %{"qualifieds" => qualifieds_params} = params) do
@@ -32,12 +32,12 @@ defmodule EcPredictions.QualifiedController do
     end
 
     qualifieds = Enum.reject(changes, fn qual -> qual.action == :delete end)
-    countries = Repo.all Country
+    groups = Repo.all(Group) |> Repo.preload(country_groups: :country)
 
     if length(qualifieds) > 16 do
       conn
       |> put_flash(:info, "Selected too many qualified countries")
-      |> render("show.html", user: user, qualifieds: user.qualifieds, countries: countries)
+      |> render("show.html", user: user, qualifieds: user.qualifieds, groups: groups)
     else
       User.changeset(user, %{})
       |> Ecto.Changeset.put_assoc(:qualifieds, changes)
