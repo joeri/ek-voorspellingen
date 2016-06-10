@@ -7,7 +7,7 @@ defmodule EcPredictions.PredictionView do
       _ -> false
     end
 
-    if game.start_time <= Ecto.DateTime.utc do
+    if game.start_time <= Timex.DateTime.now do
       ""
     else
       if prediction do
@@ -16,5 +16,12 @@ defmodule EcPredictions.PredictionView do
         link("Predict", to: prediction_path(conn, :new, %{ "game_id" => game_id }))
       end
     end
+  end
+
+  def format_time(time) do
+    {:ok, result} = time
+                    |> Timex.DateTime.local()
+                    |> Timex.Format.DateTime.Formatter.format("{YYYY}-{M}-{D} {h24}:{m}")
+    result
   end
 end

@@ -2,7 +2,7 @@ defmodule EcPredictions.Game do
   use EcPredictions.Web, :model
 
   schema "games" do
-    field :start_time, Ecto.DateTime
+    field :start_time, Timex.Ecto.DateTime
     field :first_goal, :integer
     field :home_country_goals, :integer
     field :away_country_goals, :integer

@@ -18,7 +18,7 @@ defmodule EcPredictions.PredictionController do
 
     IO.inspect changeset
 
-    if game.start_time <= Ecto.DateTime.utc do
+    if game.start_time <= Timex.DateTime.now do
         conn
         |> put_flash(:error, "Game has started or is over")
         |> redirect(to: prediction_path(conn, :index))
@@ -37,7 +37,7 @@ defmodule EcPredictions.PredictionController do
     game = Repo.get(Game, prediction_params["game_id"]) |> Repo.preload([:home_country, :away_country])
     changeset = Prediction.changeset(%Prediction{}, Map.put(prediction_params, "user", user))
 
-    if game.start_time <= Ecto.DateTime.utc do
+    if game.start_time <= Timex.DateTime.now do
         conn
         |> put_flash(:error, "Game has started or is over")
         |> redirect(to: prediction_path(conn, :index))
@@ -60,7 +60,7 @@ defmodule EcPredictions.PredictionController do
     prediction = Repo.get(Prediction, id) |> Repo.preload(game: [:home_country, :away_country])
     changeset = Prediction.update_changeset(prediction)
 
-    if prediction.game.start_time <= Ecto.DateTime.utc do
+    if prediction.game.start_time <= Timex.DateTime.now do
         conn
         |> put_flash(:error, "Game has started or is over")
         |> redirect(to: prediction_path(conn, :index))

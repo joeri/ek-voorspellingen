@@ -19,7 +19,7 @@ defmodule EcPredictions.Mixfile do
   def application do
     [mod: {EcPredictions, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin]]
+                    :phoenix_ecto, :postgrex, :comeonin, :timex]]
   end
 
   # Specifies which paths to compile per environment.
@@ -39,7 +39,9 @@ defmodule EcPredictions.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:comeonin, "~> 2.0"},
-     {:guardian, "~> 0.12.0"}]
+     {:guardian, "~> 0.12.0"},
+     {:timex, "~> 2.1.6"},
+     {:timex_ecto, "~> 1.1.1"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
