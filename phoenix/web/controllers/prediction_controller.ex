@@ -6,7 +6,7 @@ defmodule EcPredictions.PredictionController do
 
   def index(conn, _params) do
     user = Guardian.Plug.current_resource(conn) |> Repo.preload(:predictions)
-    games = Repo.all(Game) |> Repo.preload([:home_country, :away_country])
+    games = Repo.all(from g in Game, order_by: g.start_time) |> Repo.preload([:home_country, :away_country])
 
     render(conn, "index.html", games: games, predictions: user.predictions)
   end
