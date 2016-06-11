@@ -5,6 +5,8 @@
       <th>Home Country</th>
       <th>Away Country</th>
       <th>Date</th>
+      <th>Prediction</th>
+      <th>Actual</th>
       <th></th>
     </tr>
   </thead>
@@ -13,6 +15,8 @@
       <td><%= game.home_country.name %></td>
       <td><%= game.away_country.name %></td>
       <td><%= format_time(game.start_time) %></td>
+      <td><%= show_prediction(@predictions, game) %></td>
+      <td><%= show_game(game) %></td>
       <td><%= edit_or_create_prediction(@conn, @predictions, game) %></td>
     </tr>
   <% end %>

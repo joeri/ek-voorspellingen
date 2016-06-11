@@ -1,19 +1,33 @@
 defmodule EcPredictions.PredictionView do
   use EcPredictions.Web, :view
 
-  def edit_or_create_prediction(conn, predictions, %{ :id => game_id } = game) do
-    prediction = Enum.find predictions, fn
-      %{ game_id: ^game_id } -> true
-      _ -> false
-    end
+  def show_prediction(predictions, game) do
+    prediction = find_prediction(predictions, game.id)
 
+    if prediction do
+      "#{prediction.home_country_goals}-#{prediction.away_country_goals}"
+    else
+      ""
+    end
+  end
+
+  def show_game(game) do
+    if game.home_country_goals do
+      "#{game.home_country_goals}-#{game.away_country_goals}"
+    else
+      ""
+    end
+  end
+
+  def edit_or_create_prediction(conn, predictions, game) do
+    prediction = find_prediction(predictions, game.id)
     if game.start_time <= Timex.DateTime.now do
       ""
     else
       if prediction do
         link("Update", to: prediction_path(conn, :edit, prediction))
       else
-        link("Predict", to: prediction_path(conn, :new, %{ "game_id" => game_id }))
+        link("Predict", to: prediction_path(conn, :new, %{ "game_id" => game.id }))
       end
     end
   end
@@ -24,4 +38,12 @@ defmodule EcPredictions.PredictionView do
                     |> Timex.Format.DateTime.Formatter.format("{YYYY}-{M}-{D} {h24}:{m}")
     result
   end
+
+  defp find_prediction(predictions, game_id) do
+    prediction = Enum.find predictions, fn
+      %{ game_id: ^game_id } -> true
+      _ -> false
+    end
+  end
+
 end

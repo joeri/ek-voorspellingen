@@ -33,8 +33,8 @@ defmodule EcPredictions.Game do
   """
   def after_changeset(struct, params \\ %{}) do
     struct
-    |> changeset(params)
-    |> validate_required([:home_country_goals, :first_goal, :away_country_goals, :final_home_country_goals, :final_away_country_goals, :penalties_home_country_goals, :penalties_away_country_goals])
+    |> cast(params, [:home_country_goals, :first_goal, :away_country_goals, :final_home_country_goals, :final_away_country_goals, :penalties_home_country_goals, :penalties_away_country_goals])
+    |> validate_required([:home_country_goals, :away_country_goals])
     |> validate_inclusion(:first_goal, 1..120)
   end
 end
