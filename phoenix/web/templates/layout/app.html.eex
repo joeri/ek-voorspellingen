@@ -14,12 +14,17 @@
   <body>
     <div class="container">
       <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <%= render "sign_in_sign_out.html", conn: @conn %><br><br>
-          </ul>
-        </nav>
-        <span class="logo"></span>
+        <ol class="breadcrumb text-right">
+          <%= if logged_in?(@conn) do %>
+            <li><%= current_user(@conn).name %></li>
+            <li><%= link "Home", to: page_path(@conn, :index) %></li>
+            <li><%= link "Profile", to: user_path(@conn, :show, current_user(@conn)) %></li>
+            <li><%= link "Log out", to: session_path(@conn, :delete, :access), method: "delete" %></li>
+          <% else %>
+            <li><%= link "Register", to: user_path(@conn, :new) %></li>
+            <li><%= link "Log in", to: session_path(@conn, :new) %></li>
+          <% end %>
+        </ol>
       </header>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
