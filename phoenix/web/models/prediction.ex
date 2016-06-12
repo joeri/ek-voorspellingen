@@ -12,10 +12,11 @@ defmodule EcPredictions.Prediction do
     timestamps
   end
 
-  def points(prediction) do
-    if same_home_country_goals(prediction) && same_away_country_goals(prediction) do
-      7
-    else
+  def points(%{game: game} = prediction) do
+    cond do
+    game.home_country_goals == nil -> 0
+    same_home_country_goals(prediction) && same_away_country_goals(prediction) -> 7
+    true ->
       subtotal = if same_winner(prediction) do 2 else 0 end
       if same_home_country_goals(prediction) || same_away_country_goals(prediction) do
         subtotal = subtotal + 1
@@ -24,14 +25,13 @@ defmodule EcPredictions.Prediction do
     end
   end
 
-  defp same_home_country_goals(prediction) do
-    prediction.home_country_goals == prediction.game.home_country_goals
+  defp same_home_country_goals(%{game: game} = prediction) do
+    prediction.home_country_goals == game.home_country_goals
   end
-  defp same_away_country_goals(prediction) do
-    prediction.away_country_goals == prediction.game.away_country_goals
+  defp same_away_country_goals(%{game: game} = prediction) do
+    prediction.away_country_goals == game.away_country_goals
   end
-  defp same_winner(prediction) do
-    game = prediction.game
+  defp same_winner(%{game: game} = prediction) do
     compare(prediction.away_country_goals, prediction.home_country_goals) ==
       compare(game.away_country_goals, game.home_country_goals)
   end
