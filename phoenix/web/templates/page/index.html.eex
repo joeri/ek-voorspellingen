@@ -1,5 +1,6 @@
 <div>
   <ul>
+    <li><%= link("Leaderboard", to: leaderboard_path(@conn, :show)) %></li>
     <li><%= link("Favourites", to: favourite_path(@conn, :show)) %></li>
     <li><%= link("Qualifiers", to: qualified_path(@conn, :show)) %></li>
     <li><%= link("Predictions", to: prediction_path(@conn, :index)) %></li>
