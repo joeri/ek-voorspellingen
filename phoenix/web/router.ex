@@ -38,6 +38,8 @@ defmodule EcPredictions.Router do
     get "/qualifieds", QualifiedController, :show
     post "/qualifieds", QualifiedController, :update
     resources "/predictions", PredictionController
+
+    get "/leaderboard", LeaderboardController, :show
   end
 
   # Other scopes may use custom stacks.

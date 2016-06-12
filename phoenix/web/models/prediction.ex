@@ -12,6 +12,37 @@ defmodule EcPredictions.Prediction do
     timestamps
   end
 
+  def points(prediction) do
+    if same_home_country_goals(prediction) && same_away_country_goals(prediction) do
+      7
+    else
+      subtotal = if same_winner(prediction) do 2 else 0 end
+      if same_home_country_goals(prediction) || same_away_country_goals(prediction) do
+        subtotal = subtotal + 1
+      end
+      subtotal
+    end
+  end
+
+  defp same_home_country_goals(prediction) do
+    prediction.home_country_goals == prediction.game.home_country_goals
+  end
+  defp same_away_country_goals(prediction) do
+    prediction.away_country_goals == prediction.game.away_country_goals
+  end
+  defp same_winner(prediction) do
+    game = prediction.game
+    compare(prediction.away_country_goals, prediction.home_country_goals) ==
+      compare(game.away_country_goals, game.home_country_goals)
+  end
+  defp compare(a,b) do
+    cond do
+      a > b  ->  1
+      a == b ->  0
+      a < b  -> -1
+    end
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """

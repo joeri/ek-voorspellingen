@@ -11,6 +11,8 @@ defmodule EcPredictions.User do
     has_many :qualifieds, EcPredictions.Qualified
     has_many :predictions, EcPredictions.Prediction
 
+    has_one :score, EcPredictions.Score
+
     timestamps
   end
 
@@ -34,6 +36,7 @@ defmodule EcPredictions.User do
     |> validate_required(:password)
     |> validate_length(:password, min: 6, max: 100)
     |> put_pass_hash()
+    |> put_assoc(:score, EcPredictions.Score.new)
   end
 
   defp base_changeset(struct, params \\ %{}) do
