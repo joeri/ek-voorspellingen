@@ -31,7 +31,7 @@ defmodule EcPredictions.User do
   """
   def registration_changeset(user, params \\ %{}) do
     user
-    |> changeset(params)
+    |> base_changeset(params)
     |> cast(params, [:password])
     |> validate_required(:password)
     |> validate_length(:password, min: 6, max: 100)
