@@ -39,7 +39,7 @@ defmodule EcPredictions.User do
     |> put_assoc(:score, EcPredictions.Score.new)
   end
 
-  defp base_changeset(user, params \\ %{}) do
+  defp base_changeset(user, params) do
     user
     |> cast(params, [:email, :name])
     |> validate_required([:email, :name])
