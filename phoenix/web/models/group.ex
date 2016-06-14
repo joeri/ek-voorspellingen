@@ -10,10 +10,10 @@ defmodule EcPredictions.Group do
   end
 
   @doc """
-  Builds a changeset based on the `struct` and `params`.
+  Builds a changeset based on the `group` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(group, params \\ %{}) do
+    group
     |> cast(params, [:name])
     |> validate_required([:name])
     |> unique_constraint(:name)

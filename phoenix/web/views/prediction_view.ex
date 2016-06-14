@@ -27,7 +27,7 @@ defmodule EcPredictions.PredictionView do
       if prediction do
         link("Update", to: prediction_path(conn, :edit, prediction))
       else
-        link("Predict", to: prediction_path(conn, :new, %{ "game_id" => game.id }))
+        link("Predict", to: prediction_path(conn, :new, %{"game_id" => game.id}))
       end
     end
   end
@@ -41,7 +41,7 @@ defmodule EcPredictions.PredictionView do
 
   defp find_prediction(predictions, game_id) do
     prediction = Enum.find predictions, fn
-      %{ game_id: ^game_id } -> true
+      %{game_id: ^game_id} -> true
       _ -> false
     end
   end

@@ -18,10 +18,10 @@ defmodule EcPredictions.Game do
   end
 
   @doc """
-  Builds a changeset based on the `struct` and `params`.
+  Builds a changeset based on the `game` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(game, params \\ %{}) do
+    game
     |> cast(params, [:start_time, :first_goal, :home_country_goals, :away_country_goals, :final_home_country_goals, :final_away_country_goals, :penalties_home_country_goals, :penalties_away_country_goals, :round])
     |> put_assoc(:away_country, params["away_country"])
     |> put_assoc(:home_country, params["home_country"])
@@ -31,8 +31,8 @@ defmodule EcPredictions.Game do
   @doc """
   Changeset for when the final whistle has been blown and all results are known
   """
-  def after_changeset(struct, params \\ %{}) do
-    struct
+  def after_changeset(game, params \\ %{}) do
+    game
     |> cast(params, [:home_country_goals, :first_goal, :away_country_goals, :final_home_country_goals, :final_away_country_goals, :penalties_home_country_goals, :penalties_away_country_goals])
     |> validate_required([:home_country_goals, :away_country_goals])
     |> validate_inclusion(:first_goal, 1..120)

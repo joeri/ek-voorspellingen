@@ -10,10 +10,10 @@ defmodule EcPredictions.CountryGroup do
   end
 
   @doc """
-  Builds a changeset based on the `struct` and `params`.
+  Builds a changeset based on the `country_group` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(country_group, params \\ %{}) do
+    country_group
     |> cast(params, [:rank])
     |> validate_required([:rank])
     |> put_assoc(:group, params["group"])

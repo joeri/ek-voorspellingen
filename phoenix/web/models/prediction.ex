@@ -44,17 +44,17 @@ defmodule EcPredictions.Prediction do
   end
 
   @doc """
-  Builds a changeset based on the `struct` and `params`.
+  Builds a changeset based on the `prediction` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(prediction, params \\ %{}) do
+    prediction
     |> cast(params, [:home_country_goals, :away_country_goals, :game_id])
     |> validate_required([:home_country_goals, :away_country_goals])
     |> put_assoc(:user, params["user"])
   end
 
-  def update_changeset(struct, params \\ %{}) do
-    struct
+  def update_changeset(prediction, params \\ %{}) do
+    prediction
     |> cast(params, [:home_country_goals, :away_country_goals])
     |> validate_required([:home_country_goals, :away_country_goals])
   end

@@ -19,9 +19,10 @@ defmodule EcPredictions.Score do
   end
 
   def update_all do
-    inter = Repo.all(User)
+    inter = User
+    |> Repo.all()
     |> Repo.preload([:score, predictions: :game])
-    |> Enum.map(fn user -> Score.changeset(user.score, %{ points: Score.calculate(user) }) |> Repo.update end)
+    |> Enum.map(fn user -> user.score |> Score.changeset(%{points: Score.calculate(user)}) |> Repo.update end)
   end
 
   def new do
@@ -29,10 +30,10 @@ defmodule EcPredictions.Score do
   end
 
   @doc """
-  Builds a changeset based on the `struct` and `params`.
+  Builds a changeset based on the `score` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(score, params \\ %{}) do
+    score
     |> cast(params, [:points])
     |> validate_required([:points])
     |> unique_constraint(:user_id)

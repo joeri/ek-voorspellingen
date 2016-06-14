@@ -35,21 +35,20 @@ defmodule EcPredictions.UserController do
     user = Repo.get(User, id)
     changeset = User.changeset(user, user_params)
 
-    cond do
-      user == Guardian.Plug.current_resource(conn) ->
-        case Repo.update(changeset) do
-          {:ok, user} ->
-            conn
-            |> put_flash(:info, "User updated")
-            |> redirect(to: page_path(conn, :index))
-          {:error, changeset} ->
-            conn
-            |> render("show.html", user: user, changeset: changeset)
-        end
-      :error ->
-        conn
-        |> put_flash(:info, "No access")
-        |> redirect(to: page_path(conn, :index))
+    if user == Guardian.Plug.current_resource(conn) do
+      case Repo.update(changeset) do
+        {:ok, user} ->
+          conn
+          |> put_flash(:info, "User updated")
+          |> redirect(to: page_path(conn, :index))
+        {:error, changeset} ->
+          conn
+          |> render("show.html", user: user, changeset: changeset)
+      end
+    else
+      conn
+      |> put_flash(:info, "No access")
+      |> redirect(to: page_path(conn, :index))
     end
   end
 end

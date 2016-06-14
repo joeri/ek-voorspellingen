@@ -41,7 +41,8 @@ defmodule EcPredictions.Mixfile do
      {:comeonin, "~> 2.0"},
      {:guardian, "~> 0.12.0"},
      {:timex, "~> 2.1.6"},
-     {:timex_ecto, "~> 1.1.1"}]
+     {:timex_ecto, "~> 1.1.1"},
+     {:credo, "~> 0.4", only: [:dev, :test]}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

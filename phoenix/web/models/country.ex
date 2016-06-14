@@ -8,10 +8,10 @@ defmodule EcPredictions.Country do
   end
 
   @doc """
-  Builds a changeset based on the `struct` and `params`.
+  Builds a changeset based on the `country` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(country, params \\ %{}) do
+    country
     |> cast(params, [:name])
     |> validate_required([:name])
   end

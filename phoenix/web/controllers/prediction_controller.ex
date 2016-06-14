@@ -5,23 +5,23 @@ defmodule EcPredictions.PredictionController do
   alias EcPredictions.Prediction
 
   def index(conn, _params) do
-    user = Guardian.Plug.current_resource(conn) |> Repo.preload(:predictions)
-    games = Repo.all(from g in Game, order_by: g.start_time) |> Repo.preload([:home_country, :away_country])
+    user = conn |> Guardian.Plug.current_resource() |> Repo.preload(:predictions)
+    games = (from g in Game, order_by: g.start_time)
+            |> Repo.all()
+            |> Repo.preload([:home_country, :away_country])
 
     render(conn, "index.html", games: games, predictions: user.predictions)
   end
 
-  def new(conn, %{ "game_id" => game_id }) do
-    user = Guardian.Plug.current_resource(conn) |> Repo.preload(:predictions)
-    game = Repo.get(Game, game_id) |> Repo.preload([:home_country, :away_country])
-    changeset = Prediction.changeset(%Prediction{}, %{ "game_id" => game_id })
-
-    IO.inspect changeset
+  def new(conn, %{"game_id" => game_id}) do
+    user = conn |> Guardian.Plug.current_resource() |> Repo.preload(:predictions)
+    game = Game |> Repo.get(game_id) |> Repo.preload([:home_country, :away_country])
+    changeset = Prediction.changeset(%Prediction{}, %{"game_id" => game_id})
 
     if game.start_time <= Timex.DateTime.now do
-        conn
-        |> put_flash(:error, "Game has started or is over")
-        |> redirect(to: prediction_path(conn, :index))
+      conn
+      |> put_flash(:error, "Game has started or is over")
+      |> redirect(to: prediction_path(conn, :index))
     else
       render(conn, "new.html", game: game, changeset: changeset)
     end
@@ -32,15 +32,15 @@ defmodule EcPredictions.PredictionController do
     |> redirect(to: prediction_path(conn, :index))
   end
 
-  def create(conn, %{ "prediction" => prediction_params }) do
-    user = Guardian.Plug.current_resource(conn) |> Repo.preload(:predictions)
-    game = Repo.get(Game, prediction_params["game_id"]) |> Repo.preload([:home_country, :away_country])
+  def create(conn, %{"prediction" => prediction_params}) do
+    user = conn |> Guardian.Plug.current_resource() |> Repo.preload(:predictions)
+    game = Game |> Repo.get(prediction_params["game_id"]) |> Repo.preload([:home_country, :away_country])
     changeset = Prediction.changeset(%Prediction{}, Map.put(prediction_params, "user", user))
 
     if game.start_time <= Timex.DateTime.now do
-        conn
-        |> put_flash(:error, "Game has started or is over")
-        |> redirect(to: prediction_path(conn, :index))
+      conn
+      |> put_flash(:error, "Game has started or is over")
+      |> redirect(to: prediction_path(conn, :index))
     else
       case Repo.insert(changeset) do
         {:ok, prediction} ->
@@ -55,47 +55,43 @@ defmodule EcPredictions.PredictionController do
     end
   end
 
-  def edit(conn, %{ "id" => id }) do
+  def edit(conn, %{"id" => id}) do
     user = Guardian.Plug.current_resource(conn)
-    prediction = Repo.get(Prediction, id) |> Repo.preload(game: [:home_country, :away_country])
+    prediction = Prediction |> Repo.get(id) |> Repo.preload(game: [:home_country, :away_country])
     changeset = Prediction.update_changeset(prediction)
 
-    if prediction.game.start_time <= Timex.DateTime.now do
+    cond do
+      prediction.game.start_time <= Timex.DateTime.now ->
         conn
         |> put_flash(:error, "Game has started or is over")
         |> redirect(to: prediction_path(conn, :index))
-    else
-      cond do
-        user.id == prediction.user_id ->
-          render(conn, "edit.html", game: prediction.game, prediction: prediction, changeset: changeset)
-        true ->
-          conn
-          |> put_flash(:error, "You can only modify your own predictions.")
-          |> redirect(to: prediction_path(conn, :index))
-      end
-    end
-  end
-
-  def update(conn, %{ "id" => id, "prediction" => prediction_params }) do
-    user = Guardian.Plug.current_resource(conn)
-    prediction = Repo.get(Prediction, id) |> Repo.preload(:game)
-    changeset = Prediction.update_changeset(prediction, prediction_params)
-    IO.inspect changeset
-
-    cond do
       user.id == prediction.user_id ->
-        case Repo.update(changeset) do
-          {:ok, _prediction} ->
-            conn
-            |> put_flash(:info, "Updated prediction")
-            |> redirect(to: prediction_path(conn, :index))
-          {:error, changeset} ->
-            render(conn, "edit.html", game: prediction.game, prediction: prediction, changeset: changeset)
-        end
+          render(conn, "edit.html", game: prediction.game, prediction: prediction, changeset: changeset)
       true ->
         conn
         |> put_flash(:error, "You can only modify your own predictions.")
         |> redirect(to: prediction_path(conn, :index))
+    end
+  end
+
+  def update(conn, %{"id" => id, "prediction" => prediction_params}) do
+    user = Guardian.Plug.current_resource(conn)
+    prediction = Prediction |> Repo.get(id) |> Repo.preload(:game)
+    changeset = Prediction.update_changeset(prediction, prediction_params)
+
+    if user.id == prediction.user_id do
+      case Repo.update(changeset) do
+        {:ok, _prediction} ->
+          conn
+          |> put_flash(:info, "Updated prediction")
+          |> redirect(to: prediction_path(conn, :index))
+        {:error, changeset} ->
+          render(conn, "edit.html", game: prediction.game, prediction: prediction, changeset: changeset)
+      end
+    else
+      conn
+      |> put_flash(:error, "You can only modify your own predictions.")
+      |> redirect(to: prediction_path(conn, :index))
     end
   end
 end
