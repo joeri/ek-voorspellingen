@@ -38,6 +38,7 @@ defmodule EcPredictions.Router do
     get "/qualifieds", QualifiedController, :show
     post "/qualifieds", QualifiedController, :update
     resources "/predictions", PredictionController
+    resources "/games", GameController, only: [:show]
 
     get "/leaderboard", LeaderboardController, :show
   end

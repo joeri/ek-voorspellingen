@@ -1,0 +1,16 @@
+<h1><%= @game.home_country.name %> - <%= @game.away_country.name %></h1>
+
+<div>
+  <strong>Start time:</strong> <%= format_time(@game.start_time) %>
+</div>
+<div>
+  <strong>Outcome:</strong> <%= @game.home_country_goals %>-<%= @game.away_country_goals %>
+</div>
+
+<h2>Predictions</h2>
+
+<ul>
+<%= for prediction <- @game.predictions do %>
+  <li><strong><%= prediction.user.name %></strong> <%= prediction.home_country_goals %>-<%= prediction.away_country_goals %> (<%= EcPredictions.Prediction.points(prediction) %> points)</li>
+<% end %>
+</ul>

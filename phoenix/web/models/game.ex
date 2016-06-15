@@ -14,6 +14,8 @@ defmodule EcPredictions.Game do
     belongs_to :home_country, EcPredictions.Country
     belongs_to :away_country, EcPredictions.Country
 
+    has_many :predictions, EcPredictions.Prediction
+
     timestamps
   end
 
