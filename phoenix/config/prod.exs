@@ -13,8 +13,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :ec_predictions, EcPredictions.Endpoint,
   http: [port: 4001],
-  https: [port: 8080],
-  url: [host: "irishsultan.be", scheme: "https"],
+  url: [host: "irishsultan.be", scheme: "https", port: 8080],
   cache_static_manifest: "priv/static/manifest.json"
 
 # Do not print debug messages in production
