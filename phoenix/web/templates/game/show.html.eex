@@ -8,9 +8,18 @@
 </div>
 
 <h2>Predictions</h2>
-
 <ul>
 <%= for prediction <- @game.predictions do %>
   <li><strong><%= prediction.user.name %></strong> <%= prediction.home_country_goals %>-<%= prediction.away_country_goals %> (<%= EcPredictions.Prediction.points(prediction) %> points)</li>
 <% end %>
 </ul>
+
+<h2>Favourites</h2>
+<div>
+  <strong><%= @game.home_country.name %> (<%= EcPredictions.Country.points([@game],[]) %> points): </strong>
+  <%= @game.home_country.favourited_by |> Enum.map(fn u -> u.name end) |> Enum.join(", ") %>
+</div>
+<div>
+  <strong><%= @game.away_country.name %> (<%= EcPredictions.Country.points([],[@game]) %> points): </strong>
+  <%= @game.away_country.favourited_by |> Enum.map(fn u -> u.name end) |> Enum.join(", ") %>
+</div>

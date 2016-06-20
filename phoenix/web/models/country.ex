@@ -7,6 +7,9 @@ defmodule EcPredictions.Country do
     has_many :home_games, EcPredictions.Game, foreign_key: :home_country_id
     has_many :away_games, EcPredictions.Game, foreign_key: :away_country_id
 
+    has_many :favourited, EcPredictions.Favourite, foreign_key: :country_id
+    has_many :favourited_by, through: [:favourited, :user]
+
     timestamps
   end
 
