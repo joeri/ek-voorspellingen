@@ -51,6 +51,7 @@ defmodule EcPredictions.Prediction do
     |> cast(params, [:home_country_goals, :away_country_goals, :game_id])
     |> validate_required([:home_country_goals, :away_country_goals])
     |> put_assoc(:user, params["user"])
+    |> unique_constraint(:game_id, name: :predictions_user_id_game_id_index)
   end
 
   def update_changeset(prediction, params \\ %{}) do
