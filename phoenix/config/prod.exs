@@ -14,7 +14,9 @@ use Mix.Config
 config :ec_predictions, EcPredictions.Endpoint,
   http: [port: 4001],
   url: [host: "irishsultan.be", scheme: "https", port: 8080],
-  cache_static_manifest: "priv/static/manifest.json"
+  cache_static_manifest: "priv/static/manifest.json",
+  root: ".",
+  server: true
 
 # Do not print debug messages in production
 config :logger, level: :info

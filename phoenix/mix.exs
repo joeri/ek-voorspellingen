@@ -3,7 +3,7 @@ defmodule EcPredictions.Mixfile do
 
   def project do
     [app: :ec_predictions,
-     version: "0.0.1",
+     version: "0.0.2",
      elixir: "~> 1.2",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -19,7 +19,7 @@ defmodule EcPredictions.Mixfile do
   def application do
     [mod: {EcPredictions, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin, :timex]]
+                    :phoenix_ecto, :postgrex, :comeonin, :timex, :timex_ecto, :guardian]]
   end
 
   # Specifies which paths to compile per environment.
@@ -42,7 +42,8 @@ defmodule EcPredictions.Mixfile do
      {:guardian, "~> 0.12.0"},
      {:timex, "~> 2.1.6"},
      {:timex_ecto, "~> 1.1.1"},
-     {:credo, "~> 0.4", only: [:dev, :test]}]
+     {:credo, "~> 0.4", only: [:dev, :test]},
+     {:exrm, "~> 1.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
