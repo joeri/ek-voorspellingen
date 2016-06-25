@@ -26,14 +26,29 @@ defmodule EcPredictions.Prediction do
   end
 
   defp same_home_country_goals(%{game: game} = prediction) do
-    prediction.home_country_goals == game.home_country_goals
+    if game.round == 1 do
+      prediction.home_country_goals == game.home_country_goals
+    else
+      prediction.home_country_goals == game.final_home_country_goals
+    end
   end
   defp same_away_country_goals(%{game: game} = prediction) do
-    prediction.away_country_goals == game.away_country_goals
+    if game.round == 1 do
+      prediction.away_country_goals == game.away_country_goals
+    else
+      prediction.away_country_goals == game.final_away_country_goals
+    end
   end
   defp same_winner(%{game: game} = prediction) do
-    compare(prediction.away_country_goals, prediction.home_country_goals) ==
-      compare(game.away_country_goals, game.home_country_goals)
+    outcome_prediction = compare(prediction.away_country_goals, prediction.home_country_goals)
+    outcome_game =
+      if game.round == 1 do
+        compare(game.away_country_goals, game.home_country_goals)
+      else
+        compare(game.final_away_country_goals, game.final_home_country_goals)
+      end
+
+    outcome_prediction == outcome_game
   end
   defp compare(a,b) do
     cond do
