@@ -4,7 +4,7 @@
   <strong>Start time:</strong> <%= format_time(@game.start_time) %>
 </div>
 <div>
-  <strong>Outcome:</strong> <%= @game.home_country_goals %>-<%= @game.away_country_goals %>
+  <strong>Outcome:</strong> <%= format_outcome(@game) %>
 </div>
 
 <h2>Predictions</h2>
