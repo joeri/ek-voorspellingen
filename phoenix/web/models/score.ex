@@ -1,6 +1,6 @@
 defmodule EcPredictions.Score do
   use EcPredictions.Web, :model
-  alias EcPredictions.{Repo,User,Score,Prediction,Country}
+  alias EcPredictions.{Score,Prediction}
 
   schema "scores" do
     field :points, :integer
@@ -9,33 +9,22 @@ defmodule EcPredictions.Score do
     timestamps
   end
 
-  def calculate(user, country_scores \\ calculate_all_countries) do
+  def calculate(user, country_scores, qualified_countries) do
     predictions = user.predictions
-    |> Enum.map(fn p -> Prediction.points(p) end)
-    |> Enum.sum
+                  |> Enum.map(fn p -> Prediction.points(p) end)
+                  |> Enum.sum
 
     favourites = user.favourites
-    |> Enum.map(fn f -> country_scores[f.country_id] end)
-    |> Enum.sum
+                  |> Enum.map(fn f -> country_scores[f.country_id] end)
+                  |> Enum.sum
 
-    predictions + favourites
+    qualified = user.qualifieds
+                |> Enum.filter(fn f -> MapSet.member?(qualified_countries, f.country_id) end)
+                |> length
+
+    predictions + favourites + 2 * qualified
   end
 
-  def calculate_all_countries do
-    Country
-    |> Repo.all()
-    |> Repo.preload([:home_games, :away_games])
-    |> Enum.reduce(%{}, fn (country, acc) ->
-        Map.put_new(acc, country.id, Country.points(country.home_games, country.away_games))
-    end)
-  end
-
-  def update_all do
-    User
-    |> Repo.all()
-    |> Repo.preload([:score, :favourites, predictions: :game])
-    |> Enum.map(fn user -> user.score |> Score.changeset(%{points: Score.calculate(user)}) |> Repo.update end)
-  end
 
   def new do
     changeset(%Score{}, %{points: 0})
