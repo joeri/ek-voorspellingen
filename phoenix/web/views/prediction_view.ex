@@ -13,7 +13,7 @@ defmodule EcPredictions.PredictionView do
 
   def show_game(game) do
     if game.home_country_goals do
-      "#{game.home_country_goals}-#{game.away_country_goals}"
+      EcPredictions.GameView.format_outcome(game)
     else
       ""
     end
