@@ -12,7 +12,7 @@ defmodule EcPredictions.ScoreUpdate do
   end
 
   def update_all do
-    all_countries = calculate_all_countries
+    all_countries = EcPredictions.ScoreUpdate.calculate_all_countries
     qualified_countries =
       (from g in Game, where: g.round == 2, select: [g.home_country_id, g.away_country_id]) |> Repo.all |> List.flatten |> MapSet.new
 

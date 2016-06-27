@@ -14,7 +14,7 @@ defmodule EcPredictions.FavouriteController do
     user = conn |> Guardian.Plug.current_resource() |> Repo.preload(:favourites)
     groups = Group |> Repo.all() |> Repo.preload(country_groups: :country)
 
-    if Timex.DateTime.from_erl({{2016,6,15},{13,0,0}}) < Timex.DateTime.now do
+    if Timex.after?(Timex.DateTime.now, Timex.datetime({{2016,6,15},{13,0,0}})) do
       conn
       |> put_flash(:error, "Too late to modify selection")
       |> render("show.html", user: user, favourites: user.favourites, groups: groups)

@@ -18,7 +18,7 @@ defmodule EcPredictions.PredictionController do
     game = Game |> Repo.get(game_id) |> Repo.preload([:home_country, :away_country])
     changeset = Prediction.changeset(%Prediction{}, %{"game_id" => game_id})
 
-    if game.start_time <= Timex.DateTime.now do
+    if Timex.after?(Timex.DateTime.now, game.start_time) do
       conn
       |> put_flash(:error, "Game has started or is over")
       |> redirect(to: prediction_path(conn, :index))
@@ -37,7 +37,7 @@ defmodule EcPredictions.PredictionController do
     game = Game |> Repo.get(prediction_params["game_id"]) |> Repo.preload([:home_country, :away_country])
     changeset = Prediction.changeset(%Prediction{}, Map.put(prediction_params, "user", user))
 
-    if game.start_time <= Timex.DateTime.now do
+    if Timex.after?(Timex.DateTime.now, game.start_time) do
       conn
       |> put_flash(:error, "Game has started or is over")
       |> redirect(to: prediction_path(conn, :index))
@@ -61,7 +61,7 @@ defmodule EcPredictions.PredictionController do
     changeset = Prediction.update_changeset(prediction)
 
     cond do
-      prediction.game.start_time <= Timex.DateTime.now ->
+      Timex.after?(Timex.DateTime.now, prediction.game.start_time) ->
         conn
         |> put_flash(:error, "Game has started or is over")
         |> redirect(to: prediction_path(conn, :index))

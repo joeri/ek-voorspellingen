@@ -21,7 +21,7 @@ defmodule EcPredictions.PredictionView do
 
   def edit_or_create_prediction(conn, predictions, game) do
     prediction = find_prediction(predictions, game.id)
-    if game.start_time <= Timex.DateTime.now do
+    if Timex.after?(Timex.DateTime.now, game.start_time) do
       link("Show", to: game_path(conn, :show, game))
     else
       if prediction do

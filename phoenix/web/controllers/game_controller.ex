@@ -5,7 +5,7 @@ defmodule EcPredictions.GameController do
   def show(conn, %{"id" => id}) do
     game = Game |> Repo.get(id)
 
-    if game.start_time <= Timex.DateTime.now do
+    if Timex.after?(Timex.DateTime.now, game.start_time) do
       game = game |> Repo.preload([[predictions: [:user,:game]], [home_country: [:favourited_by]], [away_country: [:favourited_by]]])
       conn
       |> render("show.html", game: game)
